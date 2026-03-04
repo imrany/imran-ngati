@@ -1,10 +1,13 @@
-const API_BASE = "https://api.triple-ts-mediclinic.com";
+const API_BASE = "https://api.triple-ts-mediclinic.com/api";
 
 function getToken(): string | null {
   return localStorage.getItem("auth_token");
 }
 
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+async function request<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
   const token = getToken();
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -30,8 +33,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
 export const api = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: unknown) => request<T>(url, { method: "POST", body: JSON.stringify(data) }),
-  put: <T>(url: string, data: unknown) => request<T>(url, { method: "PUT", body: JSON.stringify(data) }),
+  post: <T>(url: string, data: unknown) =>
+    request<T>(url, { method: "POST", body: JSON.stringify(data) }),
+  put: <T>(url: string, data: unknown) =>
+    request<T>(url, { method: "PUT", body: JSON.stringify(data) }),
   delete: <T>(url: string) => request<T>(url, { method: "DELETE" }),
 };
 

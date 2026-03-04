@@ -1,8 +1,14 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { api, setToken, clearToken, isAuthenticated } from "@/lib/api";
 
 interface User {
-  id: string;
+  user_id: string;
   name: string;
   email: string;
   role: string;
@@ -31,7 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      api.get<User>("/auth/me")
+      api
+        .get<User>(`/staff/${user?.user_id || localStorage.getItem("user_id")}`)
         .then(setUser)
         .catch(() => {
           clearToken();
@@ -43,9 +50,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await api.post<{ token: string; user: User }>("/auth/login", { email, password });
-    setToken(res.token);
-    setUser(res.user);
+    const loginResponse = await api.post<{
+      token: string;
+      user_id: string;
+      email: string;
+      message: string;
+    }>("/signin", {
+      email,
+      password,
+    });
+
+    const { token, user_id } = loginResponse;
+    setToken(token);
+    localStorage.setItem("user_id", user_id);
+
+    try {
+      // Fetch the full user profile using the user_id obtained from login
+      const fullUser = await api.get<User>(`/staff/${user_id}`);
+      setUser(fullUser);
+      console.log("Login successful for user:", fullUser);
+    } catch (error) {
+      console.error("Failed to fetch user details after login:", error);
+      // If fetching user details fails, clear the token and user state
+      clearToken();
+      setUser(null);
+      throw error; // Re-throw the error for the caller to handle
+    }
   }, []);
 
   const logout = useCallback(() => {
@@ -54,7 +84,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: !!user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn: !!user, loading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
