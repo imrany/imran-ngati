@@ -1,0 +1,30 @@
+{
+  "short_name": "Imran Ngati",
+  "name": "Imran Ngati — Full-stack Web Developer",
+  "description": "Portfolio of Imran Ngati: e-commerce, recruitment platforms, M-Pesa & email integrations, and APIs built to scale.",
+  "start_url": "/",
+  "id": "/",
+  "background_color": "#FFFF",
+  "theme_color": "#FFFF",
+  "orientation": "portrait-primary",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

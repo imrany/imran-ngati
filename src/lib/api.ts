@@ -1,4 +1,4 @@
-const API_BASE = "https://api.triple-ts-mediclinic.com/api";
+const API_BASE = "http://example.com/api";
 
 function getToken(): string | null {
   return localStorage.getItem("auth_token");
