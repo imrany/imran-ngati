@@ -26,7 +26,33 @@ export default function Hero({
 }) {
   return (
     <section id="top" className="relative lg:pt-4 pt-8">
+      {/*
+        Opposing continuous animation loops.
+        We translate the exact grid container by 50% (the height of one full loop iteration).
+      */}
+      <style>{`
+        @keyframes bento-reverse {
+          0% { transform: translateY(-50%); }
+          100% { transform: translateY(0%); }
+        }
+        @keyframes bento-forward {
+          0% { transform: translateY(0%); }
+          100% { transform: translateY(-50%); }
+        }
+        .animate-bento-left {
+          animation: bento-reverse 30s linear infinite;
+        }
+        .animate-bento-right {
+          animation: bento-forward 30s linear infinite;
+        }
+        .bento-carousel-viewport:hover .animate-bento-left,
+        .bento-carousel-viewport:hover .animate-bento-right {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       <div className="mx-auto max-w-7xl px-6 pt-12 pb-20 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-12">
+        {/* Left Info Columns */}
         <div className="lg:col-span-7 flex flex-col justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-6">
@@ -96,16 +122,49 @@ export default function Hero({
           </div>
         </div>
 
-        <div className="lg:col-span-5 grid grid-cols-2 grid-rows-3 gap-3 min-h-125 lg:min-h-150">
-          {bentoTiles.map((b) => (
-            <BentoTile
-              className={b.className}
-              gradient={b.gradient}
-              label={b.label}
-              image={b.image}
-              url={b.url}
-            />
-          ))}
+        {/* ── UNTOUCHED BENTO CAROUSEL SYSTEM ── */}
+        <div className="bento-carousel-viewport lg:col-span-5 h-130 lg:h-155 overflow-hidden relative">
+          {/* Faded Scenery Gradients */}
+          <div className="absolute top-0 inset-x-0 h-7 bg-linear-to-b from-background via-background/60 to-transparent z-30 pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-7 bg-linear-to-t from-background via-background/60 to-transparent z-30 pointer-events-none" />
+
+          {/*
+            LANE 1: LEFT SIDE MOVING DOWN
+            Renders the complete grid intact, but visually clips out the right column.
+          */}
+          <div className="absolute inset-0 [clip-path:inset(0_50%_0_0)]">
+            <div className="flex flex-col gap-3 animate-bento-left">
+              {[1, 2].map((i) => (
+                <div
+                  key={`left-grid-${i}`}
+                  className="grid grid-cols-2 grid-rows-3 gap-3 min-h-125 lg:min-h-150 shrink-0"
+                >
+                  {bentoTiles.map((b, idx) => (
+                    <BentoTile key={`l-${i}-${idx}`} {...b} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/*
+            LANE 2: RIGHT SIDE MOVING UP
+            Renders the exact same complete grid intact, but visually clips out the left column.
+          */}
+          <div className="absolute inset-0 [clip-path:inset(0_0_0_50%)]">
+            <div className="flex flex-col gap-3 animate-bento-right">
+              {[1, 2].map((i) => (
+                <div
+                  key={`right-grid-${i}`}
+                  className="grid grid-cols-2 grid-rows-3 gap-3 min-h-125 lg:min-h-150 shrink-0"
+                >
+                  {bentoTiles.map((b, idx) => (
+                    <BentoTile key={`r-${i}-${idx}`} {...b} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

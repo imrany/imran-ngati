@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Terminal, Database, Server } from "lucide-react";
 
 interface TechNode {
@@ -9,9 +10,45 @@ interface TechNode {
 }
 
 export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const languages = techStack.filter((t) => t.category === "languages");
   const databases = techStack.filter((t) => t.category === "databases");
   const infra = techStack.filter((t) => t.category === "infra");
+
+  // ── SYNC STEP DOTS ON MOBILE SCROLL ──
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Determine currently visible swimlane column index via offset math tracking
+    const scrollLeft = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+    const calculatedIndex = Math.round(scrollLeft / containerWidth);
+
+    // Keep state within safe array range limits (0 to 2)
+    if (
+      calculatedIndex !== activeIndex &&
+      calculatedIndex >= 0 &&
+      calculatedIndex < 3
+    ) {
+      setActiveIndex(calculatedIndex);
+    }
+  };
+
+  // ── MANUAL STEP INDICATOR INTERACTION ──
+  const handleDotClick = (index: number) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const containerWidth = container.clientWidth;
+    container.scrollTo({
+      left: index * containerWidth,
+      behavior: "smooth",
+    });
+    setActiveIndex(index);
+  };
 
   return (
     <section
@@ -30,13 +67,15 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
         </p>
       </div>
 
-      <div className="relative w-full max-w-6xl mx-auto min-h-145">
-        {/* ── LAYOUT ENGINE CONTROLLER ── */}
-        {/* Mobile Viewports: Turns into high-performance side-swipe swimlanes */}
-        {/* Desktop Viewports: Snaps to absolute diagram spacing columns */}
-        <div className="flex overflow-x-auto lg:overflow-visible gap-6 pb-8 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-12 lg:pb-0 relative z-10 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-none">
+      <div className="relative w-full max-w-6xl mx-auto">
+        {/* ── HIGH PERFORMANCE SCROLL ENGINE ── */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex overflow-x-auto lg:overflow-visible gap-6 pb-8 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-12 lg:pb-0 relative z-10 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-none"
+        >
           {/* COLUMN 1: Languages */}
-          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center lg:mt-4">
+          <div className="flex flex-col gap-4 min-w-[85vw] sm:min-w-[50vw] lg:min-w-0 snap-center lg:mt-4">
             <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
               <Terminal className="size-4 text-blue-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
@@ -45,13 +84,13 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
             </div>
             <div className="flex flex-col gap-3">
               {languages.map((node) => (
-                <TechCard key={node.name} node={node} />
+                <TechCard key={`lang-${node.name}`} node={node} />
               ))}
             </div>
           </div>
 
-          {/* COLUMN 2: Databases (Moved to center base spacing mathematically on desktop) */}
-          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center">
+          {/* COLUMN 2: Databases */}
+          <div className="flex flex-col gap-4 min-w-[85vw] sm:min-w-[50vw] lg:min-w-0 snap-center">
             <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
               <Database className="size-4 text-purple-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
@@ -60,13 +99,13 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
             </div>
             <div className="flex flex-col gap-3">
               {databases.map((node) => (
-                <TechCard key={node.name} node={node} />
+                <TechCard key={`db-${node.name}`} node={node} />
               ))}
             </div>
           </div>
 
           {/* COLUMN 3: DevOps & Cloud */}
-          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center lg:mt-4">
+          <div className="flex flex-col gap-4 min-w-[85vw] sm:min-w-[50vw] lg:min-w-0 snap-center lg:mt-4">
             <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
               <Server className="size-4 text-green-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
@@ -75,17 +114,26 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
             </div>
             <div className="flex flex-col gap-3">
               {infra.map((node) => (
-                <TechCard key={node.name} node={node} />
+                <TechCard key={`infra-${node.name}`} node={node} />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Carousel Visual Pagination Indicators for Mobile Devices Only */}
-        <div className="flex justify-center gap-1.5 mt-2 lg:hidden">
-          <div className="h-1 w-5 rounded-full bg-primary/80" />
-          <div className="h-1 w-2 rounded-full bg-border" />
-          <div className="h-1 w-2 rounded-full bg-border" />
+        {/* ── LIVE INTERACTIVE PAGINATION STEPS (Mobile Viewports Only) ── */}
+        <div className="flex justify-center gap-2 mt-4 lg:hidden">
+          {[0, 1, 2].map((idx) => (
+            <button
+              key={`step-dot-${idx}`}
+              onClick={() => handleDotClick(idx)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                idx === activeIndex
+                  ? "w-6 bg-primary"
+                  : "w-2 bg-border hover:bg-muted-foreground/40"
+              }`}
+              aria-label={`Jump to structural step lane ${idx + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>

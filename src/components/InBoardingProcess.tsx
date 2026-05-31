@@ -1,5 +1,5 @@
-import React from "react";
-import { CheckCircle } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { MessageSquare, Layout, Code, Server, CheckCircle } from "lucide-react";
 
 interface ProcessStep {
   phase: string;
@@ -12,6 +12,34 @@ interface ProcessStep {
 }
 
 export default function InBoardingProcess({ steps }: { steps: ProcessStep[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // ── CALC ACTIVE STEP BASED ON ACTIVE SCROLL POSITION ──
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const clientWidth = container.clientWidth;
+
+    // Detect item width dynamically based on first child card element layout
+    const cardWidth =
+      container.firstElementChild?.getBoundingClientRect().width ||
+      clientWidth * 0.85;
+    const gap = 24; // matches gap-6 spacing layout
+
+    const calculatedIndex = Math.round(scrollLeft / (cardWidth + gap));
+
+    if (
+      calculatedIndex !== activeIndex &&
+      calculatedIndex >= 0 &&
+      calculatedIndex < steps.length
+    ) {
+      setActiveIndex(calculatedIndex);
+    }
+  };
+
   return (
     <section
       id="process"
@@ -41,9 +69,12 @@ export default function InBoardingProcess({ steps }: { steps: ProcessStep[] }) {
         </div>
 
         {/* --- PROCESS CAROUSEL / GRID CONTAINER --- */}
-        {/* Adds horizontal scrolling and touch snapping on mobile screens, shifts back to regular grids on md/lg viewports */}
-        <div className="flex overflow-x-auto pb-6 gap-6 snap-x snap-mandatory scrollbar-none md:grid md:grid-cols-2 lg:grid-cols-4 lg:gap-8 relative z-10 -mx-6 px-6 md:mx-0 md:px-0">
-          {steps.map((step, idx) => (
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex overflow-x-auto pb-6 gap-6 snap-x snap-mandatory scrollbar-none md:grid md:grid-cols-2 lg:grid-cols-4 lg:gap-8 relative z-10 -mx-6 px-6 md:mx-0 md:px-0"
+        >
+          {steps.map((step) => (
             <div
               key={step.phase}
               className="flex flex-col group min-w-[85vw] sm:min-w-[50vw] md:min-w-0 snap-center"
@@ -116,12 +147,14 @@ export default function InBoardingProcess({ steps }: { steps: ProcessStep[] }) {
           ))}
         </div>
 
-        {/* --- CAROUSEL HINT FOR MOBILE USERS --- */}
+        {/* --- CAROUSEL HINT FOR MOBILE USERS (Fixed layout state tracking) --- */}
         <div className="flex justify-center gap-1.5 mt-2 md:hidden">
-          {steps.map((step) => (
+          {steps.map((step, idx) => (
             <div
               key={step.phase}
-              className="h-1 w-4 rounded-full bg-border group-hover:bg-primary/40 transition-colors"
+              className={`h-1 rounded-full transition-all duration-300 ${
+                idx === activeIndex ? "w-5 bg-primary/80" : "w-2 bg-border"
+              }`}
             />
           ))}
         </div>
