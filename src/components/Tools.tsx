@@ -16,9 +16,12 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
   return (
     <section
       id="tools"
-      className="relative pb-6 px-6 mx-auto max-w-7xl overflow-hidden"
+      className="relative pb-10 px-6 mx-auto max-w-7xl overflow-hidden"
     >
-      <div className="text-center max-w-3xl mx-auto mb-20">
+      {/* Background Subtle Tech-Grid Accent */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[14px_24px] pointer-events-none" />
+
+      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
         <h2 className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
           Ecosystem
         </h2>
@@ -27,90 +30,86 @@ export default function ToolsSection({ techStack }: { techStack: TechNode[] }) {
         </p>
       </div>
 
-      {/* ── Desktop: 3-col diagram layout. Mobile: stacked tracks ── */}
-      <div className="relative w-full max-w-6xl mx-auto">
-        {/* ── DESKTOP LAYOUT ── */}
-        <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-12 lg:items-start">
-          {/* LEFT: Languages */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 px-2 text-muted-foreground">
+      <div className="relative w-full max-w-6xl mx-auto min-h-145">
+        {/* ── LAYOUT ENGINE CONTROLLER ── */}
+        {/* Mobile Viewports: Turns into high-performance side-swipe swimlanes */}
+        {/* Desktop Viewports: Snaps to absolute diagram spacing columns */}
+        <div className="flex overflow-x-auto lg:overflow-visible gap-6 pb-8 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-12 lg:pb-0 relative z-10 -mx-6 px-6 lg:mx-0 lg:px-0 scrollbar-none">
+          {/* COLUMN 1: Languages */}
+          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center lg:mt-4">
+            <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
+              <Terminal className="size-4 text-blue-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
                 Languages
               </span>
-              <Terminal className="size-4" />
             </div>
-            {languages.map((node) => (
-              <TechCard
-                key={node.name}
-                node={node}
-                layoutDirection="flex-row text-left"
-              />
-            ))}
+            <div className="flex flex-col gap-3">
+              {languages.map((node) => (
+                <TechCard key={node.name} node={node} />
+              ))}
+            </div>
           </div>
 
-          {/* Databases */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 px-2 text-muted-foreground">
-              <Database className="size-4" />
+          {/* COLUMN 2: Databases (Moved to center base spacing mathematically on desktop) */}
+          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center">
+            <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
+              <Database className="size-4 text-purple-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
                 Data Architecture
               </span>
             </div>
-            {databases.map((node) => (
-              <TechCard
-                key={node.name}
-                node={node}
-                layoutDirection="flex-row text-left"
-              />
-            ))}
+            <div className="flex flex-col gap-3">
+              {databases.map((node) => (
+                <TechCard key={node.name} node={node} />
+              ))}
+            </div>
           </div>
 
-          {/* Infra */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 px-2 text-muted-foreground">
-              <Server className="size-4" />
+          {/* COLUMN 3: DevOps & Cloud */}
+          <div className="flex flex-col gap-4 min-w-[82vw] sm:min-w-[45vw] lg:min-w-0 snap-center lg:mt-4">
+            <div className="flex items-center gap-2 px-1 text-muted-foreground mb-1">
+              <Server className="size-4 text-green-500" />
               <span className="text-xs uppercase tracking-widest font-bold">
                 DevOps & Cloud
               </span>
             </div>
-            {infra.map((node) => (
-              <TechCard
-                key={node.name}
-                node={node}
-                layoutDirection="flex-row text-left"
-              />
-            ))}
+            <div className="flex flex-col gap-3">
+              {infra.map((node) => (
+                <TechCard key={node.name} node={node} />
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Carousel Visual Pagination Indicators for Mobile Devices Only */}
+        <div className="flex justify-center gap-1.5 mt-2 lg:hidden">
+          <div className="h-1 w-5 rounded-full bg-primary/80" />
+          <div className="h-1 w-2 rounded-full bg-border" />
+          <div className="h-1 w-2 rounded-full bg-border" />
         </div>
       </div>
     </section>
   );
 }
 
-function TechCard({
-  node,
-  layoutDirection,
-}: {
-  node: TechNode;
-  layoutDirection: string;
-}) {
+function TechCard({ node }: { node: TechNode }) {
   return (
     <div
-      className={`flex items-center gap-4 p-3.5 rounded-2xl border border-border bg-card/40 backdrop-blur-md transition-all duration-300 group hover:bg-card/70 hover:border-border/80 hover:shadow-md shadow-sm ${node.bgClass} ${layoutDirection}`}
+      className={`flex items-center gap-4 p-3.5 rounded-2xl border border-border bg-card/40 backdrop-blur-md transition-all duration-300 group hover:bg-card/70 hover:border-border/80 hover:shadow-md shadow-sm ${node.bgClass}`}
     >
       <div className="size-11 rounded-xl bg-background/80 p-2 flex items-center justify-center border border-border/60 group-hover:scale-105 transition-transform shrink-0">
         <img
           src={node.logo}
-          alt={`${node.name} logo`}
+          alt={`${node.name} representation`}
           className="max-w-full max-h-full object-contain"
           loading="lazy"
         />
       </div>
-      <div className="flex flex-col min-w-0">
-        <h3 className="text-xs font-bold tracking-tight text-foreground">
+      <div className="flex flex-col min-w-0 text-left">
+        <h3 className="text-xs font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-200">
           {node.name}
         </h3>
-        <p className="text-[11px] text-muted-foreground truncate max-w-[200px]">
+        <p className="text-[11px] text-muted-foreground truncate leading-normal mt-0.5">
           {node.description}
         </p>
       </div>

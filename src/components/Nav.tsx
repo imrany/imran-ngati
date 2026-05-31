@@ -67,6 +67,7 @@ export default function Nav({
     { href: "#work", label: "Work" },
     { href: "#services", label: "Services" },
     { href: "#contact", label: "Contact" },
+    { href: "#process", label: "InBoarding" },
   ];
 
   return (

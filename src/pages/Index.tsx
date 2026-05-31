@@ -2,12 +2,22 @@ import BashadiAgencyLogo from "../assets/bashadi-agency-logo.png";
 import Ecommerce from "../assets/ecommerce.png";
 import Recruitment from "../assets/recruitment.png";
 import VillebizLogo from "../assets/villebiz-logo.png";
-import { Youtube, Instagram, Linkedin, Twitter } from "lucide-react";
+import {
+  Youtube,
+  Instagram,
+  Linkedin,
+  Twitter,
+  MessageSquare,
+  Layout,
+  Code,
+  Server,
+} from "lucide-react";
 import Work from "@/components/Work";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import ContactBand from "@/components/ContactBand";
 import Services from "@/components/Services";
+import InBoardingProcess from "@/components/InBoardingProcess";
 import Hero from "@/components/Hero";
 import Tools from "@/components/Tools";
 import GmailIcon from "@/components/GmailIcon";
@@ -45,7 +55,7 @@ const projects = [
     kind: "Manpower Recruitment Platform",
     blurb:
       "End-to-end recruitment portal connecting employers with vetted talent — listings, applications, and admin dashboard.",
-    tags: ["React", "Node.js", "PostgreSQL"],
+    tags: ["Vue", "Rust", "PostgreSQL", "SQLite"],
     gradient: "from-indigo-500/30 via-violet-500/10 to-transparent",
     logo: BashadiAgencyLogo,
     url: "https://bashadi-agency.onrender.com",
@@ -94,7 +104,10 @@ const services = [
   },
   { title: "E-commerce", desc: "Storefronts, carts, checkout, and admin." },
   { title: "M-Pesa Integrations", desc: "STK Push, C2B, B2C, reconciliation." },
-  { title: "Email Systems", desc: "Transactional pipelines and templates." },
+  {
+    title: "Email Integration",
+    desc: "Transactional pipelines and templates.",
+  },
   { title: "API Development", desc: "REST APIs, auth, and documentation." },
   { title: "Maintenance", desc: "Bug fixes, performance and uptime." },
 ];
@@ -233,6 +246,61 @@ const techStack = [
   },
 ];
 
+const steps = [
+  {
+    phase: "01",
+    title: "Discovery & Blueprint",
+    description:
+      "Alignment call to outline project scope, technical specifications, database architecture, and initial wireframes.",
+    deliverables: [
+      "System Requirements Doc",
+      "Figma Wireframes",
+      "Fixed Quote",
+    ],
+    duration: "3 - 5 Days",
+    cost: "Free Engagement",
+    icon: <MessageSquare className="size-5 text-blue-500" />,
+  },
+  {
+    phase: "02",
+    title: "UI/UX High-Fidelity Design",
+    description:
+      "Crafting modern, responsive user interfaces customized for your target audience. Built with interactive interactive prototypes.",
+    deliverables: ["Interactive Figma Prototype", "Design Component System"],
+    duration: "1 Week",
+    cost: "KES 3,000",
+    icon: <Layout className="size-5 text-purple-500" />,
+  },
+  {
+    phase: "03",
+    title: "Full-Stack Development",
+    description:
+      "Transforming signed-off layouts into clean source code using high-speed engines (Go/Python/TypeScript) and efficient local data layer architectures.",
+    deliverables: [
+      "Clean Git Repository",
+      "Frontend Components",
+      "API Testing",
+    ],
+    duration: "2 - 3 Weeks",
+    cost: "KES 25,000",
+    icon: <Code className="size-5 text-orange-500" />,
+  },
+  {
+    phase: "04",
+    title: "Optimized Cloud Launch",
+    description:
+      "Setting up lightweight Docker containers, staging reverse-proxies through Nginx, and going live on an affordable cloud VPS infrastructure.",
+    deliverables: [
+      "Live Production Domain",
+      "SSL Security Certificate",
+      "Automated Backups",
+    ],
+    duration: "2 - 3 Days",
+    cost: "KES 10,000",
+    icon: <Server className="size-5 text-green-500" />,
+  },
+];
+
 export default function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground font-display selection:bg-accent/20 selection:text-foreground">
@@ -249,6 +317,7 @@ export default function Index() {
       />
       <Work projects={projects} />
       <Services services={services} />
+      <InBoardingProcess steps={steps} />
       <Tools techStack={techStack} />
       <ContactBand
         EMAIL_URL={EMAIL_URL}
