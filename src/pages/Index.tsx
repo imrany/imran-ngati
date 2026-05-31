@@ -74,11 +74,11 @@ const projects = [
     url: GITHUB_PROFILE + "/whats-email",
   },
   {
-    title: "REST API Services",
+    title: "Backend Microservices",
     kind: "Backend",
     blurb:
       "Authenticated, documented APIs powering web and mobile clients with rate-limiting and monitoring.",
-    tags: ["Node.js", "JWT", "OpenAPI"],
+    tags: ["Go", "JWT", "Postgres"],
     gradient: "from-rose-500/30 via-pink-500/10 to-transparent",
   },
 ];
@@ -113,7 +113,7 @@ const bentoTiles = [
   {
     className: "row-span-1",
     gradient: "from-amber-500/25 via-orange-500/5",
-    label: "Online Payment Integrations",
+    label: "M-Pesa Integration",
     image: "https://paystarafrica.com/wp-content/uploads/2025/03/mpesa_api.png",
     url: "mailto:imranmat254@gmail.com?subject=Online Payment Integrations Request",
   },
