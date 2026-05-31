@@ -40,10 +40,10 @@ export default function Hero({
           100% { transform: translateY(-50%); }
         }
         .animate-bento-left {
-          animation: bento-reverse 30s linear infinite;
+          animation: bento-reverse 60s linear infinite;
         }
         .animate-bento-right {
-          animation: bento-forward 30s linear infinite;
+          animation: bento-forward 60s linear infinite;
         }
         .bento-carousel-viewport:hover .animate-bento-left,
         .bento-carousel-viewport:hover .animate-bento-right {
@@ -137,7 +137,7 @@ export default function Hero({
               {[1, 2].map((i) => (
                 <div
                   key={`left-grid-${i}`}
-                  className="grid grid-cols-2 grid-rows-3 gap-3 min-h-125 lg:min-h-150 shrink-0"
+                  className="grid grid-cols-2 grid-rows-3 gap-3 min-h-150 lg:min-h-190 shrink-0"
                 >
                   {bentoTiles.map((b, idx) => (
                     <BentoTile key={`l-${i}-${idx}`} {...b} />
