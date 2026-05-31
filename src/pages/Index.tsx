@@ -20,7 +20,11 @@ const OG_GITHUB =
 const GITHUB_PROFILE = "https://gihub.com/imrany";
 
 const socialMediaLinks = [
-  { icon: Youtube, label: "Youtube", url: "https://youtube.com/mat_imrany" },
+  {
+    icon: Youtube,
+    label: "Youtube",
+    url: "https://www.youtube.com/@mat_imrany",
+  },
   {
     icon: Instagram,
     label: "Instagram",
