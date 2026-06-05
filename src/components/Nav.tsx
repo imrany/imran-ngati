@@ -143,7 +143,7 @@ export default function Nav() {
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
-                  <Menu className="size-4" />
+                  <Menu className="size-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent className="w-72">
@@ -158,6 +158,21 @@ export default function Nav() {
                     </button>
                   ))}
                 </nav>
+                <div className="fixed bottom-4 left-0 right-0">
+                  <Button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      toggleTheme();
+                    }}
+                    className="flex size-9 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 hover:opacity-95 transition focus:outline-none"
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="size-4" />
+                    ) : (
+                      <Moon className="size-4" />
+                    )}
+                  </Button>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
