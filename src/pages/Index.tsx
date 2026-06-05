@@ -1,7 +1,3 @@
-import BashadiAgencyLogo from "../assets/bashadi-agency-logo.png";
-import Ecommerce from "../assets/ecommerce.png";
-import Recruitment from "../assets/recruitment.png";
-import VillebizLogo from "../assets/villebiz-logo.png";
 import {
   Youtube,
   Instagram,
@@ -49,54 +45,6 @@ export const socialMediaLinks = [
   { icon: GmailIcon, label: "Email", url: EMAIL_URL },
 ];
 
-export const projects = [
-  {
-    title: "Bashadi Agency",
-    kind: "Manpower Recruitment Platform",
-    blurb:
-      "End-to-end recruitment portal connecting employers with vetted talent — listings, applications, and admin dashboard.",
-    tags: ["Vue", "Rust", "PostgreSQL", "SQLite"],
-    gradient: "from-indigo-500/30 via-violet-500/10 to-transparent",
-    logo: BashadiAgencyLogo,
-    url: "https://bashadi-agency.onrender.com",
-  },
-  {
-    title: "E-commerce",
-    kind: "Online Store",
-    blurb:
-      "Full storefront with cart, checkout, inventory and order management, optimized for mobile-first shoppers.",
-    tags: ["React", "M-Pesa", "REST API"],
-    gradient: "from-emerald-500/30 via-teal-500/10 to-transparent",
-    logo: VillebizLogo,
-    url: "https://elegance-u3gc.onrender.com",
-  },
-  {
-    title: "M-Pesa Integration",
-    kind: "Payments",
-    blurb:
-      "STK Push, C2B and B2C flows with reconciliation webhooks and idempotent transaction handling.",
-    tags: ["Daraja API", "Webhooks", "Node.js"],
-    gradient: "from-amber-500/30 via-orange-500/10 to-transparent",
-  },
-  {
-    title: "Email Integration",
-    kind: "Transactional Email",
-    blurb:
-      "Templated, deliverable email pipelines — verification, receipts and campaigns with bounce handling.",
-    tags: ["SMTP", "Templates", "Queues"],
-    gradient: "from-sky-500/30 via-cyan-500/10 to-transparent",
-    url: GITHUB_PROFILE + "/whats-email",
-  },
-  {
-    title: "Backend Microservices",
-    kind: "Backend",
-    blurb:
-      "Authenticated, documented APIs powering web and mobile clients with rate-limiting and monitoring.",
-    tags: ["Go", "JWT", "Postgres"],
-    gradient: "from-rose-500/30 via-pink-500/10 to-transparent",
-  },
-];
-
 export const services = [
   {
     title: "Web Applications",
@@ -117,14 +65,14 @@ export const bentoTiles = [
     className: "row-span-1",
     gradient: "from-indigo-500/25 via-violet-500/5",
     label: "E-commerce",
-    image: Ecommerce,
+    image: "/images/ecommerce.png",
     url: "https://elegance-u3gc.onrender.com",
   },
   {
     className: "row-span-2",
     gradient: "from-emerald-500/25 via-teal-500/5",
     label: "Bashadi Agency",
-    image: Recruitment,
+    image: "/images/recruitment.png",
     url: "https://bashadi-agency.onrender.com",
   },
   {
@@ -306,7 +254,7 @@ export default function Index() {
     <div className="min-h-screen bg-background text-foreground font-display selection:bg-accent/20 selection:text-foreground">
       <Nav />
       <Hero />
-      <WorkAndInsights projects={projects} />
+      <WorkAndInsights />
       <Services services={services} />
       <InBoardingProcess steps={steps} />
       <Tools techStack={techStack} />

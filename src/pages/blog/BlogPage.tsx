@@ -91,19 +91,37 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
   // ── RELATED INSIGHTS ──
   const relatedPosts = useMemo(() => {
     if (!post) return [];
-    return posts
-      .filter((p) => p.slug !== post.slug)
-      .map((p) => {
-        let score = 0;
-        if (p.kind === post.kind) score += 5;
-        const commonTags = p.tags?.filter((t) => post.tags?.includes(t)) || [];
-        score += commonTags.length * 2;
-        return { post: p, score };
-      })
+
+    // 1. Filter out the current active post immediately
+    const otherPosts = posts.filter((p) => p.slug !== post.slug);
+
+    // 2. Score them based on metadata matches
+    const scored = otherPosts.map((p) => {
+      let score = 0;
+
+      // Protect against undefined values cleanly
+      if (post.kind && p.kind === post.kind) score += 5;
+
+      const commonTags = p.tags?.filter((t) => post.tags?.includes(t)) || [];
+      score += commonTags.length * 2;
+
+      return { post: p, score };
+    });
+
+    // 3. If we have posts with actual matching metadata (score > 0), use them
+    const matchingPosts = scored
       .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 2)
       .map((item) => item.post);
+
+    if (matchingPosts.length > 0) {
+      return matchingPosts.slice(0, 2);
+    }
+
+    // 4. Fallback: If no tags or kinds match, return the newest posts instead of nothing
+    return otherPosts
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 2);
   }, [post, posts]);
 
   // ── INLINE BODY IMAGE CUSTOM PARSER ──
@@ -187,11 +205,15 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
     }
   };
 
+  const hasCover = !!post.coverImage && !coverHasError;
+
   return (
     <main className="min-h-screen pt-4 sm:pt-8 pb-20 sm:pb-32 font-sans selection:bg-primary/20 transition-all duration-500 text-foreground dark:text-slate-100 bg-transparent">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Navigation Breadcrumbs */}
-        <div className="flex items-center justify-between mb-6 sm:mb-10 border-b border-border/40 dark:border-border/20 pb-4 gap-4">
+        <div
+          className={`flex items-center justify-between mb-6 sm:mb-10 border-b border-border/40 dark:border-border/20 pb-4 gap-4 ${!hasCover ? "max-w-3xl mx-auto" : ""}`}
+        >
           <nav
             aria-label="Breadcrumb"
             className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs uppercase tracking-widest font-bold text-muted-foreground overflow-hidden"
@@ -224,10 +246,16 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-y-8 md:gap-x-8 lg:gap-x-12 items-start">
+        <div
+          className={
+            hasCover
+              ? "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-y-8 md:gap-x-8 lg:gap-x-12 items-start"
+              : "max-w-3xl mx-auto"
+          }
+        >
           {/* LEFT TRACK */}
-          <div className="md:col-span-1 lg:col-span-4 lg:sticky lg:top-12 flex flex-col gap-6 w-full max-w-md md:max-w-none mx-auto">
-            {post.coverImage && !coverHasError && (
+          {hasCover && (
+            <div className="md:col-span-1 lg:col-span-4 lg:sticky lg:top-12 flex flex-col gap-6 w-full max-w-md md:max-w-none mx-auto">
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden flex items-center justify-center bg-secondary/20 dark:bg-secondary/10 border border-border/40 dark:border-border/20 shadow-xs group">
                 <div
                   className={`absolute -inset-4 rounded-full bg-linear-to-br ${post.gradient || "from-primary/10 to-transparent"} blur-3xl opacity-60 pointer-events-none group-hover:opacity-80 transition-opacity duration-500`}
@@ -248,46 +276,48 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
                   }}
                 />
               </div>
-            )}
 
-            <div className="flex flex-col gap-2 relative z-10 px-1 md:px-0">
-              <span className="text-[10px] font-bold text-muted-foreground/50 tracking-wider uppercase">
-                Posted By
-              </span>
-              <div className="flex items-center gap-3">
-                {post.authorImage ? (
-                  <img
-                    src={post.authorImage}
-                    alt={post.author}
-                    className="h-9 w-9 rounded-full object-cover border border-border/60 dark:border-border/30 bg-background"
-                  />
-                ) : (
-                  <div className="h-9 w-9 rounded-full bg-secondary/40 dark:bg-secondary/20 flex items-center justify-center text-muted-foreground border border-border/40">
-                    <User className="h-4 w-4" />
-                  </div>
-                )}
-                <h4 className="text-sm font-bold tracking-wide text-foreground/90 dark:text-slate-200">
-                  {post.author}
-                </h4>
+              <div className="flex flex-col gap-2 relative z-10 px-1 md:px-0">
+                <span className="text-[10px] font-bold text-muted-foreground/50 tracking-wider uppercase">
+                  Posted By
+                </span>
+                <div className="flex items-center gap-3">
+                  {post.authorImage ? (
+                    <img
+                      src={post.authorImage}
+                      alt={post.author}
+                      className="h-9 w-9 rounded-full object-cover border border-border/60 dark:border-border/30 bg-background"
+                    />
+                  ) : (
+                    <div className="h-9 w-9 rounded-full bg-secondary/40 dark:bg-secondary/20 flex items-center justify-center text-muted-foreground border border-border/40">
+                      <User className="h-4 w-4" />
+                    </div>
+                  )}
+                  <h4 className="text-sm font-bold tracking-wide text-foreground/90 dark:text-slate-200">
+                    {post.author}
+                  </h4>
+                </div>
               </div>
+
+              {post.tags && (
+                <div className="pt-4 border-t border-border/40 dark:border-border/20 flex flex-wrap gap-2">
+                  {post.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[10px] px-2.5 py-0.5 rounded-full border border-border bg-background/60 text-muted-foreground font-medium transition-colors hover:bg-secondary/40 dark:hover:bg-secondary/20"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-
-            {post.tags && (
-              <div className="pt-4 border-t border-border/40 dark:border-border/20 flex flex-wrap gap-2">
-                {post.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[10px] px-2.5 py-0.5 rounded-full border border-border bg-background/60 text-muted-foreground font-medium transition-colors hover:bg-secondary/40 dark:hover:bg-secondary/20"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+          )}
 
           {/* RIGHT TRACK */}
-          <div className="md:col-span-2 lg:col-span-8 flex flex-col gap-6 relative z-10 w-full">
+          <div
+            className={`${hasCover ? "md:col-span-2 lg:col-span-8" : "w-full"} flex flex-col gap-6 relative z-10`}
+          >
             {post.kind && (
               <div className="inline-flex items-center gap-1.5 text-xs text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-md border border-primary/20 w-fit backdrop-blur-xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -299,7 +329,7 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm font-medium text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs sm:text-sm font-medium text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 opacity-70 shrink-0" />
                 <span>{post.date}</span>
@@ -311,7 +341,7 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
             </div>
 
             {/* Newsletter Section */}
-            <div className="bg-secondary/30 dark:bg-secondary/10 rounded-2xl p-4 sm:p-6 flex flex-col gap-4 border border-border/60 dark:border-border/20 backdrop-blur-xs mt-4">
+            <div className="bg-secondary/30 dark:bg-secondary/10 rounded-2xl p-4 sm:p-6 flex flex-col gap-4 border border-border/60 dark:border-border/20 backdrop-blur-xs mt-2">
               <div className="flex flex-col gap-1">
                 <span className="text-[10px] font-bold tracking-wider uppercase text-muted-foreground/60">
                   Newsletter
@@ -352,6 +382,42 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
                 </form>
               )}
             </div>
+            {/* Inline Author Row Fallback */}
+            {!hasCover && (
+              <div className="flex items-center gap-3 py-2  my-1">
+                {post.authorImage ? (
+                  <img
+                    src={post.authorImage}
+                    alt={post.author}
+                    className="h-7 w-7 rounded-full object-cover border border-border/60 dark:border-border/30 bg-background"
+                  />
+                ) : (
+                  <div className="h-7 w-7 rounded-full bg-secondary/40 dark:bg-secondary/20 flex items-center justify-center text-muted-foreground border border-border/40">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                )}
+                <div className="text-xs font-semibold text-muted-foreground">
+                  Written by{" "}
+                  <span className="text-foreground dark:text-slate-200 font-bold">
+                    {post.author}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Inline layout fallback tags if side track is missing */}
+            {!hasCover && post.tags && (
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="text-[10px] px-2.5 py-0.5 rounded-full border border-border bg-background/60 text-muted-foreground font-medium transition-colors hover:bg-secondary/40 dark:hover:bg-secondary/20"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <article
               id="prose-body"
@@ -359,8 +425,8 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
               prose-headings:font-black prose-headings:tracking-tight prose-headings:text-foreground dark:prose-headings:text-white
               prose-p:leading-relaxed prose-p:text-muted-foreground dark:prose-p:text-slate-300
               prose-a:text-primary prose-a:font-semibold
-              prose-pre:bg-secondary/20 dark:prose-pre:bg-black/20 prose-pre:rounded-2xl prose-pre:border prose-pre:border-border/40
-              prose-code:bg-secondary/40 dark:prose-code:bg-white/10 prose-code:px-1.5 prose-code:rounded
+              prose-pre:bg-neutral-100 dark:prose-pre:bg-black/30 prose-pre:text-neutral-900 dark:prose-pre:text-slate-200 prose-pre:rounded-2xl prose-pre:border prose-pre:border-border/40
+              prose-code:text-neutral-900 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-bold
               prose-code:before:content-none prose-code:after:content-none"
               dangerouslySetInnerHTML={{ __html: htmlBody }}
             />
@@ -399,7 +465,7 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
             )}
           </div>
         </div>
-        <Footer className="mt-24" />
+        <Footer className={`mt-24 ${!hasCover ? "max-w-3xl mx-auto" : ""}`} />
       </div>
     </main>
   );
