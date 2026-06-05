@@ -88,6 +88,10 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
     };
   }, [post, gradientBackground]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // ── RELATED INSIGHTS ──
   const relatedPosts = useMemo(() => {
     if (!post) return [];

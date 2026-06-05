@@ -36,6 +36,7 @@ export default function Blog() {
       attributes: true,
       attributeFilter: ["class"],
     });
+    window.scrollTo(0, 0);
     return () => observer.disconnect();
   }, []);
 
@@ -89,7 +90,7 @@ export default function Blog() {
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter">
                 Insights & <br className="hidden sm:inline" />
-                Architectures
+                Articles
               </h1>
               <p className="mt-4 text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed">
                 Deep-dives into systems engineering, multi-threaded pipelines,
