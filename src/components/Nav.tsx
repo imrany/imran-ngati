@@ -70,7 +70,7 @@ export default function Nav() {
   }, [scrollState.lastScrollY]);
 
   const navLinks = [
-    { href: "#work", label: "Work" },
+    { href: "#insights", label: "Insights" },
     { href: "#services", label: "Services" },
     { href: "#contact", label: "Contact" },
     { href: "#process", label: "InBoarding" },

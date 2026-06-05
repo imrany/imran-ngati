@@ -5,11 +5,7 @@ import { loadMarkdownPosts } from "@/pages/blog";
 import { Calendar, ArrowUpRight } from "lucide-react";
 import PostImage from "./PostImage";
 
-const SLIDE_REST_DURATION_MS = 3500;
-const TRANSITION_SPEED = 0.08;
-const CARD_GAP = 24;
-
-export default function WorkAndInsights() {
+export default function Insights() {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 

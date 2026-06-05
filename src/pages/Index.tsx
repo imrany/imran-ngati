@@ -16,7 +16,7 @@ import InBoardingProcess from "@/components/InBoardingProcess";
 import Hero from "@/components/Hero";
 import Tools from "@/components/Tools";
 import GmailIcon from "@/components/GmailIcon";
-import WorkAndInsights from "@/components/WorkAndInsights";
+import Insights from "@/components/Insights";
 
 export const WHATSAPP_URL = "https://wa.me/254734720752";
 export const EMAIL_URL = "mailto:imranmat254@gmail.com";
@@ -254,7 +254,7 @@ export default function Index() {
     <div className="min-h-screen bg-background text-foreground font-display selection:bg-accent/20 selection:text-foreground">
       <Nav />
       <Hero />
-      <WorkAndInsights />
+      <Insights />
       <Services services={services} />
       <InBoardingProcess steps={steps} />
       <Tools techStack={techStack} />
