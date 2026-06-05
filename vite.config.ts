@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [react()],
+  assetsInclude: ["**/*.md"], // Tells Vite to treat markdown files as static text assets
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import Stat from "./Stat";
 import BentoTile from "./BentoTile";
+import { bentoTiles } from "@/pages/Index";
 
 type BentoTile = {
   className: string;
@@ -13,17 +14,7 @@ type BentoTile = {
   url?: string;
 };
 
-export default function Hero({
-  WHATSAPP_URL,
-  EMAIL_URL,
-  PHONE_URL,
-  bentoTiles,
-}: {
-  WHATSAPP_URL: string;
-  EMAIL_URL: string;
-  PHONE_URL: string;
-  bentoTiles: BentoTile[];
-}) {
+export default function Hero() {
   return (
     <section id="top" className="relative lg:pt-4 pt-8">
       {/*
@@ -81,11 +72,7 @@ export default function Hero({
                     Chat with me
                   </Button>
                 </DropdownMenuTrigger>
-                <ContactDropdownContent
-                  EMAIL_URL={EMAIL_URL}
-                  PHONE_URL={PHONE_URL}
-                  WHATSAPP_URL={WHATSAPP_URL}
-                />
+                <ContactDropdownContent />
               </DropdownMenu>
 
               <a
@@ -125,8 +112,8 @@ export default function Hero({
         {/* ── UNTOUCHED BENTO CAROUSEL SYSTEM ── */}
         <div className="bento-carousel-viewport lg:col-span-5 h-130 lg:h-155 overflow-hidden relative">
           {/* Faded Scenery Gradients */}
-          <div className="absolute top-0 inset-x-0 h-7 bg-linear-to-b from-background via-background/60 to-transparent z-30 pointer-events-none" />
-          <div className="absolute bottom-0 inset-x-0 h-7 bg-linear-to-t from-background via-background/60 to-transparent z-30 pointer-events-none" />
+          <div className="absolute top-0 inset-x-0 h-7 hidden md:inline bg-linear-to-b from-background via-background/60 to-transparent z-30 pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-7 hidden md:inline bg-linear-to-t from-background via-background/60 to-transparent z-30 pointer-events-none" />
 
           {/*
             LANE 1: LEFT SIDE MOVING DOWN

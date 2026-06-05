@@ -12,7 +12,6 @@ import {
   Code,
   Server,
 } from "lucide-react";
-import Work from "@/components/Work";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import ContactBand from "@/components/ContactBand";
@@ -21,15 +20,16 @@ import InBoardingProcess from "@/components/InBoardingProcess";
 import Hero from "@/components/Hero";
 import Tools from "@/components/Tools";
 import GmailIcon from "@/components/GmailIcon";
+import WorkAndInsights from "@/components/WorkAndInsights";
 
-const WHATSAPP_URL = "https://wa.me/254734720752";
-const EMAIL_URL = "mailto:imranmat254@gmail.com";
-const PHONE_URL = "tel:+254703733399";
-const OG_GITHUB =
+export const WHATSAPP_URL = "https://wa.me/254734720752";
+export const EMAIL_URL = "mailto:imranmat254@gmail.com";
+export const PHONE_URL = "tel:+254703733399";
+export const OG_GITHUB =
   "https://opengraph.githubassets.com/fdcb2a1506b0b16a9a2ab7bca118c12967762e1bb919e36fa9ac1e6a22ef2e90/imrany";
-const GITHUB_PROFILE = "https://gihub.com/imrany";
+export const GITHUB_PROFILE = "https://gihub.com/imrany";
 
-const socialMediaLinks = [
+export const socialMediaLinks = [
   {
     icon: Youtube,
     label: "Youtube",
@@ -49,7 +49,7 @@ const socialMediaLinks = [
   { icon: GmailIcon, label: "Email", url: EMAIL_URL },
 ];
 
-const projects = [
+export const projects = [
   {
     title: "Bashadi Agency",
     kind: "Manpower Recruitment Platform",
@@ -97,7 +97,7 @@ const projects = [
   },
 ];
 
-const services = [
+export const services = [
   {
     title: "Web Applications",
     desc: "Production-grade React & TypeScript apps.",
@@ -112,7 +112,7 @@ const services = [
   { title: "Maintenance", desc: "Bug fixes, performance and uptime." },
 ];
 
-const bentoTiles = [
+export const bentoTiles = [
   {
     className: "row-span-1",
     gradient: "from-indigo-500/25 via-violet-500/5",
@@ -152,7 +152,7 @@ const bentoTiles = [
   },
 ];
 
-const techStack = [
+export const techStack = [
   // --- LANGUAGES ---
   {
     name: "TypeScript / JS",
@@ -246,7 +246,7 @@ const techStack = [
   },
 ];
 
-const steps = [
+export const steps = [
   {
     phase: "01",
     title: "Discovery & Blueprint",
@@ -304,27 +304,14 @@ const steps = [
 export default function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground font-display selection:bg-accent/20 selection:text-foreground">
-      <Nav
-        EMAIL_URL={EMAIL_URL}
-        PHONE_URL={PHONE_URL}
-        WHATSAPP_URL={WHATSAPP_URL}
-      />
-      <Hero
-        EMAIL_URL={EMAIL_URL}
-        PHONE_URL={PHONE_URL}
-        WHATSAPP_URL={WHATSAPP_URL}
-        bentoTiles={bentoTiles}
-      />
-      <Work projects={projects} />
+      <Nav />
+      <Hero />
+      <WorkAndInsights projects={projects} />
       <Services services={services} />
       <InBoardingProcess steps={steps} />
       <Tools techStack={techStack} />
-      <ContactBand
-        EMAIL_URL={EMAIL_URL}
-        PHONE_URL={PHONE_URL}
-        WHATSAPP_URL={WHATSAPP_URL}
-      />
-      <Footer socialMediaLinks={socialMediaLinks} />
+      <ContactBand />
+      <Footer />
     </div>
   );
 }

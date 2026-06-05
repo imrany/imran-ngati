@@ -7,16 +7,9 @@ import {
 import { Phone } from "lucide-react";
 import GmailIcon from "./GmailIcon";
 import WhatsAppIcon from "./WhatsAppIcon";
+import { EMAIL_URL, PHONE_URL, WHATSAPP_URL } from "@/pages/Index";
 
-export default function ContactDropdownContent({
-  WHATSAPP_URL,
-  EMAIL_URL,
-  PHONE_URL,
-}: {
-  WHATSAPP_URL: string;
-  EMAIL_URL: string;
-  PHONE_URL: string;
-}) {
+export default function ContactDropdownContent() {
   return (
     <DropdownMenuContent
       align="end"

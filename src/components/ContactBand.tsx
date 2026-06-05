@@ -1,16 +1,9 @@
 import { MessageCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import ContactDropdownContent from "./ContactDropdownContent";
+import { PHONE_URL } from "@/pages/Index";
 
-export default function ContactBand({
-  WHATSAPP_URL,
-  EMAIL_URL,
-  PHONE_URL,
-}: {
-  WHATSAPP_URL: string;
-  EMAIL_URL: string;
-  PHONE_URL: string;
-}) {
+export default function ContactBand() {
   return (
     <section id="contact" className="border-t border-border/60 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:py-32 text-center">
@@ -33,11 +26,7 @@ export default function ContactBand({
                 Chat with me
               </button>
             </DropdownMenuTrigger>
-            <ContactDropdownContent
-              EMAIL_URL={EMAIL_URL}
-              PHONE_URL={PHONE_URL}
-              WHATSAPP_URL={WHATSAPP_URL}
-            />
+            <ContactDropdownContent />
           </DropdownMenu>
           <a
             href={PHONE_URL}

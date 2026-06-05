@@ -1,4 +1,3 @@
-import { useTheme } from "@/hooks/use-theme";
 import {
   Github,
   MessageCircle,
@@ -22,17 +21,14 @@ import {
 } from "./ui/sheet";
 import WhatsAppIcon from "./WhatsAppIcon";
 import GmailIcon from "./GmailIcon";
+import { useTheme } from "@/context/ThemeContext";
+import { EMAIL_URL, PHONE_URL, WHATSAPP_URL } from "@/pages/Index";
+import { useNavigate } from "react-router-dom";
 
-export default function Nav({
-  WHATSAPP_URL,
-  EMAIL_URL,
-  PHONE_URL,
-}: {
-  WHATSAPP_URL: string;
-  EMAIL_URL: string;
-  PHONE_URL: string;
-}) {
-  const { theme, toggle } = useTheme();
+export default function Nav() {
+  const currentPageURL = window.location.pathname;
+  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollState, setScrollState] = useState({
     visible: true,
@@ -68,6 +64,7 @@ export default function Nav({
     { href: "#services", label: "Services" },
     { href: "#contact", label: "Contact" },
     { href: "#process", label: "InBoarding" },
+    { href: "/blog", label: "Blog" },
   ];
 
   return (
@@ -82,12 +79,15 @@ export default function Nav({
       `}
     >
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-        <a
-          href="#top"
-          className="text-sm font-bold tracking-tight hover:opacity-80 transition z-50"
+        <Button
+          variant="link"
+          onClick={() =>
+            currentPageURL === "/" ? window.scrollTo(0, 0) : navigate("/")
+          }
+          className="text-sm font-bold tracking-tight hover:opacity-80 transition z-50 cursor-pointer hover:underline-none"
         >
           Imran Ngati
-        </a>
+        </Button>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-medium text-muted-foreground">
@@ -122,16 +122,12 @@ export default function Nav({
                   <span>Chat</span>
                 </Button>
               </DropdownMenuTrigger>
-              <ContactDropdownContent
-                EMAIL_URL={EMAIL_URL}
-                PHONE_URL={PHONE_URL}
-                WHATSAPP_URL={WHATSAPP_URL}
-              />
+              <ContactDropdownContent />
             </DropdownMenu>
           </div>
 
           <Button
-            onClick={toggle}
+            onClick={toggleTheme}
             variant="outline"
             aria-label="Toggle theme"
             className="hidden md:inline-flex items-center  text-foreground hover:text-foreground justify-center size-9 rounded-full border border-border bg-card/40 hover:bg-secondary transition-all duration-200"
@@ -238,7 +234,7 @@ export default function Nav({
 
                   {/* Embedded Mobile Theme Switch */}
                   <Button
-                    onClick={toggle}
+                    onClick={toggleTheme}
                     variant="ghost"
                     size="icon"
                     className="size-8 rounded-full hover:bg-secondary text-foreground hover:text-foreground"

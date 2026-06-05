@@ -1,17 +1,8 @@
-type SocialMediaLink = {
-  label: string;
-  url: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon: any;
-};
+import { socialMediaLinks } from "@/pages/Index";
 
-export default function Footer({
-  socialMediaLinks,
-}: {
-  socialMediaLinks: SocialMediaLink[];
-}) {
+export default function Footer({ className }: { className?: string }) {
   return (
-    <footer className="border-t border-border/60">
+    <footer className={`border-t border-border/60 ${className ?? ""}`}>
       <div className="mx-auto max-w-7xl px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground">
         <span>
           © {new Date().getFullYear()} Imran Ngati. All rights reserved.
