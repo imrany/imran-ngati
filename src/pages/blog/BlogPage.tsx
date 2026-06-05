@@ -196,7 +196,7 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
       try {
         await navigator.share({
           title: post.title,
-          text: post.blurb,
+          text: `${post.blurb}\n\n Read more: `,
           url: window.location.href,
         });
       } catch (err) {
@@ -324,7 +324,7 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
           >
             {post.kind && (
               <div className="inline-flex items-center gap-1.5 text-xs text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-md border border-primary/20 w-fit backdrop-blur-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-primary text-primary animate-pulse" />
                 Featured in <span className="font-semibold">{post.kind}</span>
               </div>
             )}
@@ -345,23 +345,21 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
             </div>
 
             {/* Newsletter Section */}
-            <div className="bg-secondary/30 dark:bg-secondary/10 rounded-2xl p-4 sm:p-6 flex flex-col gap-4 border border-border/60 dark:border-border/20 backdrop-blur-xs mt-2">
-              <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-bold tracking-wider uppercase text-muted-foreground/60">
-                  Newsletter
-                </span>
-                <div className="text-sm font-medium text-foreground/90 dark:text-slate-200">
-                  {subscribed ? (
-                    <div className="flex items-center text-emerald-600 dark:text-emerald-400 gap-1.5 text-xs font-bold animate-fade-in">
-                      <CheckCircle2 className="h-4 w-4" /> Verified Subscription
-                    </div>
-                  ) : (
-                    "Get new posts and updates direct to your inbox."
-                  )}
-                </div>
+            {subscribed ? (
+              <div className="flex items-center text-emerald-600 dark:text-emerald-400 gap-1.5 text-xs font-bold animate-fade-in">
+                <CheckCircle2 className="h-4 w-4" /> Verified Subscription
               </div>
+            ) : (
+              <div className="bg-secondary/30 dark:bg-secondary/10 rounded-2xl p-4 sm:p-6 flex flex-col gap-4 border border-border/60 dark:border-border/20 backdrop-blur-xs mt-2">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold tracking-wider uppercase text-muted-foreground/60">
+                    Newsletter
+                  </span>
+                  <div className="text-sm font-medium text-foreground/90 dark:text-slate-200">
+                    Get new posts and updates direct to your inbox.
+                  </div>
+                </div>
 
-              {!subscribed && (
                 <form
                   onSubmit={handleSubscribe}
                   className="flex flex-col sm:flex-row gap-2.5 mt-1"
@@ -384,8 +382,9 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
                     Subscribe
                   </button>
                 </form>
-              )}
-            </div>
+              </div>
+            )}
+
             {/* Inline Author Row Fallback */}
             {!hasCover && (
               <div className="flex items-center gap-3 py-2  my-1">
