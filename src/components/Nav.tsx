@@ -155,7 +155,7 @@ export default function Nav() {
                     </button>
                   ))}
                 </nav>
-                <div className="fixed bottom-4 left-6">
+                <div className="fixed bottom-4 right-6">
                   <Button
                     onClick={() => {
                       setMobileMenuOpen(false);
