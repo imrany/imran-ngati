@@ -323,8 +323,8 @@ export default function BlogPage({ gradientBackground }: BlogPageProps) {
             className={`${hasCover ? "md:col-span-2 lg:col-span-8" : "w-full"} flex flex-col gap-6 relative z-10`}
           >
             {post.kind && (
-              <div className="inline-flex items-center gap-1.5 text-xs text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-md border border-primary/20 w-fit backdrop-blur-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary text-primary animate-pulse" />
+              <div className="inline-flex items-center gap-1.5 text-xs bg-secondary/40 border border-border/50 text-muted-foreground hover:text-foreground px-2.5 py-1 rounded-md w-fit backdrop-blur-xs">
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse" />
                 Featured in <span className="font-semibold">{post.kind}</span>
               </div>
             )}
