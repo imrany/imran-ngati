@@ -8,26 +8,45 @@ import Index from "./pages/Index";
 import BlogPage from "./pages/blog/BlogPage";
 import Blog from "./pages/blog/Blog";
 import { ThemeProvider } from "./context/ThemeContext";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <ThemeProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  // Redirect from /cv to /cv.pdf
+  function CvRedirect() {
+    useEffect(() => {
+      // This points to the file in your public folder
+      window.location.href = "/cv.pdf";
+    }, []);
+
+    return (
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground/60" />
+      </div>
+    );
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <ThemeProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPage />} />
+              <Route path="/cv" element={<CvRedirect />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
